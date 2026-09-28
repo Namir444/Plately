@@ -1,0 +1,6 @@
+{% extends 'delivery/base.html' %}
+{% block title %}Edit {{ restaurant.name }} · Plately{% endblock %}
+{% block content %}
+<div class="toolbar"><div class="page-heading"><p class="eyebrow">Catalog management</p><h1>Edit restaurant.</h1><p>Update the details guests see while exploring.</p></div><a class="button button-secondary" href="{% url 'open_show_restaurant' %}">Back to directory</a></div>
+<section class="card form-card"><form action="{% url 'update_restaurant' restaurant.id %}" method="post" class="form-grid">{% csrf_token %}<div class="field"><label for="name">Restaurant name</label><input class="input" id="name" type="text" name="name" maxlength="20" value="{{ restaurant.name }}" required></div><div class="field"><label for="picture">Image URL</label><input class="input" id="picture" type="url" name="picture" value="{{ restaurant.picture }}"></div><div class="field"><label for="cuisine">Cuisine</label><input class="input" id="cuisine" type="text" name="cuisine" maxlength="200" value="{{ restaurant.cuisine }}" required></div><div class="field"><label for="rating">Rating</label><input class="input" id="rating" type="number" name="rating" min="0" max="5" step="0.1" value="{{ restaurant.rating }}" required></div><button class="button" type="submit">Save changes</button></form></section>
+{% endblock %}

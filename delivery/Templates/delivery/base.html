@@ -1,0 +1,57 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fffaf5">
+    <title>{% block title %}Plately{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'FoodHub/styles.css' %}?v=20260925-catalog-import-1">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'index' %}" aria-label="Plately home">
+            <span class="brand-mark">p</span><span>Plately</span>
+        </a>
+        <p class="brand-tagline">Good food. Good mood.</p>
+        <nav class="site-nav" aria-label="Main navigation">
+            {% if current_customer %}
+                {% if is_admin %}
+                    <a href="{% url 'admin_home' %}">Dashboard</a>
+                    <a href="{% url 'open_show_restaurant' %}">Restaurants</a>
+                    <a class="nav-action" href="{% url 'open_add_restaurant' %}">Add restaurant</a>
+                {% else %}
+                    <a href="{% url 'customer_home' current_customer.username %}">Explore</a>
+                    <a href="{% url 'orders' current_customer.username %}">Orders</a>
+                    <a class="nav-action" href="{% url 'show_cart' current_customer.username %}">Your cart</a>
+                {% endif %}
+                <form action="{% url 'signout' %}" method="post" class="nav-signout">
+                    {% csrf_token %}
+                    <button type="submit" class="link-button">Sign out</button>
+                </form>
+            {% else %}
+                <a href="{% url 'open_signin' %}">Sign in</a>
+                <a class="nav-action" href="{% url 'open_signup' %}">Create account</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page-container">
+        {% if messages %}
+            <div class="flash-stack" aria-live="polite">
+                {% for message in messages %}
+                    <p class="notice {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <span>Made for the joy of a really good meal.</span>
+        <span>Plately</span>
+    </footer>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

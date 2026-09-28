@@ -1,0 +1,7 @@
+{% extends 'delivery/base.html' %}
+{% block title %}Payment update · Plately{% endblock %}
+{% block content %}
+<section class="empty-state"><div class="empty-icon" aria-hidden="true">↻</div><p class="eyebrow">Payment update</p><h1>We couldn’t confirm that payment yet.</h1><p class="alert" role="alert">{{ message }} Your cart is still here.</p>
+{% if retry_payment %}<form method="post" action="{% url 'verify_payment' username %}" class="retry-form">{% csrf_token %}<input type="hidden" name="razorpay_order_id" value="{{ retry_payment.razorpay_order_id }}"><input type="hidden" name="razorpay_payment_id" value="{{ retry_payment.razorpay_payment_id }}"><input type="hidden" name="razorpay_signature" value="{{ retry_payment.razorpay_signature }}"><button class="button" type="submit">Check payment status again</button></form>{% endif %}
+<a class="button button-secondary" href="{% url 'show_cart' username %}">Return to your cart</a></section>
+{% endblock %}

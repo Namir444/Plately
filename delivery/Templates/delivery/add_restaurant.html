@@ -1,0 +1,6 @@
+{% extends 'delivery/base.html' %}
+{% block title %}Add restaurant · Plately{% endblock %}
+{% block content %}
+<div class="toolbar"><div class="page-heading"><p class="eyebrow">Catalog management</p><h1>Add a restaurant.</h1><p>Share a new kitchen with hungry neighbors.</p></div><a class="button button-secondary" href="{% url 'admin_home' %}">Back to dashboard</a></div>
+<section class="card form-card"><form action="{% url 'add_restaurant' %}" method="post" class="form-grid">{% csrf_token %}<div class="field"><label for="name">Restaurant name</label><input class="input" id="name" type="text" name="name" maxlength="20" required></div><div class="field"><label for="picture">Image URL</label><input class="input" id="picture" type="url" name="picture" placeholder="https://…"></div><div class="field"><label for="cuisine">Cuisine</label><input class="input" id="cuisine" type="text" name="cuisine" maxlength="200" required></div><div class="field"><label for="rating">Rating</label><input class="input" id="rating" type="number" name="rating" min="0" max="5" step="0.1" required></div><button class="button" type="submit">Add restaurant</button></form></section>
+{% endblock %}

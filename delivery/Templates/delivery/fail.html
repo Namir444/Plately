@@ -1,0 +1,5 @@
+{% extends 'delivery/base.html' %}
+{% block title %}Sign-in issue · Plately{% endblock %}
+{% block content %}
+<section class="empty-state"><div class="empty-icon" aria-hidden="true">↻</div><p class="eyebrow">Let’s try that again</p><h1>We couldn’t sign you in.</h1><p>Check your username and password, then give it another try.</p><a class="button" href="{% url 'open_signin' %}">Back to sign in</a></section>
+{% endblock %}

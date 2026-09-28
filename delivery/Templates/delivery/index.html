@@ -1,0 +1,6 @@
+{% extends 'delivery/base.html' %}
+{% block title %}Plately — Good food, good mood{% endblock %}
+{% block content %}
+<section class="hero"><div class="hero-content"><p class="eyebrow">Your next favorite meal is close</p><h1>Make room for <span>something delicious.</span></h1><p class="hero-copy">Explore neighborhood kitchens, find a dish that feels right, and enjoy a little more goodness in your day.</p><div class="hero-actions"><a class="button" href="{% url 'open_signup' %}">Find your next favorite</a><a class="button button-secondary" href="{% url 'open_signin' %}">I have an account</a></div></div></section>
+<section class="card-grid feature-grid" aria-label="Why Plately"><article class="card card-pad"><p class="eyebrow">01 · Explore</p><h2>Good spots, all in one place</h2><p class="muted">Browse local restaurants and discover the flavors you’re in the mood for.</p></article><article class="card card-pad"><p class="eyebrow">02 · Choose</p><h2>A menu made easy</h2><p class="muted">See the details, find a favorite, and add it to your cart in a few taps.</p></article><article class="card card-pad"><p class="eyebrow">03 · Enjoy</p><h2>Checkout with confidence</h2><p class="muted">Pay securely and keep a simple record of your confirmed orders.</p></article></section>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'delivery/base.html' %}
+{% block title %}Order confirmed · Plately{% endblock %}
+{% block content %}
+<section class="confirmation-hero"><div class="empty-icon confirmation-icon" aria-hidden="true">✓</div><p class="eyebrow">Payment confirmed</p><h1>Something delicious is on its way.</h1><p class="hero-copy">Thanks for ordering with Plately, {{ username }}. Your order <strong>#{{ order.id }}</strong> is saved.</p></section>
+<section class="card confirmation-card"><div class="order-meta"><div><p class="eyebrow">Delivery address</p><p>{{ order.delivery_address }}</p></div><span class="status-pill">{{ order.get_status_display }}</span></div><hr class="divider"><h2>In this order</h2><ul class="order-lines">{% for line in order.lines.all %}<li><span>{{ line.quantity }} × {{ line.item_name }}</span><strong>₹{{ line.unit_price|floatformat:2 }}</strong></li>{% endfor %}</ul><div class="order-total"><span>Total paid</span><span>₹{{ order.total_amount|floatformat:2 }}</span></div><div class="hero-actions confirmation-actions"><a class="button" href="{% url 'orders' username %}">View order history</a><a class="button button-secondary" href="{% url 'customer_home' username %}">Explore more food</a></div></section>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'delivery/base.html' %}
+{% block title %}Checkout &middot; Plately{% endblock %}
+{% block extra_head %}{% if order_id %}<script src="https://checkout.razorpay.com/v1/checkout.js"></script>{% endif %}{% endblock %}
+{% block content %}
+<header class="page-heading"><p class="eyebrow">Almost time to eat</p><h1>Review your order.</h1><p>We will deliver to the address saved on your account.</p></header>
+{% if error %}
+<section class="card card-pad"><p class="alert" role="alert">{{ error }}</p><a class="button button-secondary" href="{% url 'show_cart' username %}">Return to your cart</a></section>
+{% else %}
+<div class="checkout-layout">
+    <section class="card card-pad">
+        <p class="eyebrow">Your order</p>
+        <div class="checkout-lines">{% for item in cart_items %}<div class="checkout-line"><span>{{ item.name }}</span><strong>INR {{ item.price|floatformat:2 }}</strong></div>{% endfor %}</div>
+        <div class="order-total"><span>Total</span><span>INR {{ total_price|floatformat:2 }}</span></div>
+        <hr class="divider">
+        <p class="eyebrow">Delivering to</p><p>{{ customer.address }}</p><p class="muted">{{ customer.username }} &middot; {{ customer.mobile }}</p>
+        <button id="rzp-button" class="button button-block" type="button">Pay securely with Razorpay</button>
+        <p id="payment-status" class="notice error payment-status" role="status" hidden></p>
+        <p class="field-hint payment-note">Your payment is confirmed only after the server verifies it.</p>
+        <form id="payment-verification" method="post" action="{% url 'verify_payment' username %}" hidden>{% csrf_token %}<input type="hidden" name="razorpay_order_id" value="{{ order_id }}"><input type="hidden" name="razorpay_payment_id"><input type="hidden" name="razorpay_signature"></form>
+    </section>
+    <aside class="card card-pad checkout-note"><div class="empty-icon" aria-hidden="true">&#10003;</div><h2>Almost there.</h2><p>Once payment is confirmed, this order will be saved in your order history.</p><a class="text-link" href="{% url 'show_cart' username %}">Back to cart</a></aside>
+</div>
+<script>
+    const options = {key: "{{ razorpay_key_id|escapejs }}", amount: "{{ amount_paise }}", currency: "INR", name: "Plately", description: "Food order", order_id: "{{ order_id|escapejs }}", prefill: {name: "{{ username|escapejs }}", email: "{{ customer.email|escapejs }}", contact: "{{ customer.mobile|escapejs }}"}, theme: {color: "#df7047"}, handler: function (response) {const form = document.getElementById("payment-verification");form.elements.razorpay_payment_id.value = response.razorpay_payment_id;form.elements.razorpay_signature.value = response.razorpay_signature;form.submit();}};
+    document.getElementById("rzp-button").addEventListener("click", function () {const status = document.getElementById("payment-status");if (typeof Razorpay === "undefined") {status.textContent = "Payment is temporarily unavailable. Your cart is unchanged; please try again.";status.hidden = false;return;}const checkout = new Razorpay(options);checkout.on("payment.failed", function () {status.textContent = "That payment did not go through. Your cart is unchanged; you can try again.";status.hidden = false;});checkout.open();});
+</script>
+{% endif %}
+{% endblock %}

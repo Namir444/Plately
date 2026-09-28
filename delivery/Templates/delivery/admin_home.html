@@ -1,0 +1,39 @@
+{% extends 'delivery/base.html' %}
+{% load static %}
+{% block title %}Studio dashboard | Plately{% endblock %}
+{% block content %}
+<section class="admin-dashboard">
+    <header class="dashboard-hero">
+        <div class="dashboard-hero-copy">
+            <p class="eyebrow">Plately studio</p>
+            <h1>Make every menu feel <em>irresistible.</em></h1>
+            <p>Keep your restaurant collection polished, current, and ready for people to explore.</p>
+            <div class="dashboard-hero-actions">
+                <a class="button dashboard-primary-action" href="{% url 'open_add_restaurant' %}"><span aria-hidden="true">+</span> Add a restaurant</a>
+                <a class="dashboard-text-action" href="{% url 'open_show_restaurant' %}">View the directory <span aria-hidden="true">&rarr;</span></a>
+            </div>
+        </div>
+        <div class="dashboard-hero-art" aria-hidden="true">
+            <span class="art-plate"></span><span class="art-leaf art-leaf-one"></span><span class="art-leaf art-leaf-two"></span><span class="art-dot art-dot-one"></span><span class="art-dot art-dot-two"></span><span class="art-spark">&#10022;</span>
+        </div>
+    </header>
+
+    <section class="metric-grid" aria-label="Catalog overview">
+        <article class="metric-card"><div class="metric-icon metric-icon-coral" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9l8-5 8 5v10"/><path d="M9 19v-5h6v5"/><path d="M3 19h18"/></svg></div><div><p>Restaurants</p><strong>{{ restaurant_count }}</strong><span>Places in your collection</span></div></article>
+        <article class="metric-card"><div class="metric-icon metric-icon-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4v7"/><path d="M5.5 4v4a2.5 2.5 0 0 0 5 0V4"/><path d="M8 11v9"/><path d="M16 4v16"/><path d="M16 4c2.5 1.5 3 4.5 0 6"/></svg></div><div><p>Menu items</p><strong>{{ menu_item_count }}</strong><span>Dishes ready to discover</span></div></article>
+        <article class="metric-card metric-card-note"><div class="metric-icon metric-icon-cream" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2"/><path d="M12 19v2"/><path d="m5.6 5.6 1.4 1.4"/><path d="m17 17 1.4 1.4"/><path d="M3 12h2"/><path d="M19 12h2"/><path d="m5.6 18.4 1.4-1.4"/><path d="m17 7 1.4-1.4"/><circle cx="12" cy="12" r="4"/></svg></div><div><p>Today&rsquo;s focus</p><strong>Keep it fresh</strong><span>Great details turn a listing into a craving.</span></div></article>
+    </section>
+
+    <section class="dashboard-workspace" aria-labelledby="catalog-tools-title">
+        <div class="workspace-heading"><div><p class="eyebrow">Catalog tools</p><h2 id="catalog-tools-title">What would you like to do?</h2></div><p>Two simple places to keep Plately feeling considered.</p></div>
+        <div class="dashboard-action-grid">
+            <a class="dashboard-action-card dashboard-action-create" href="{% url 'open_add_restaurant' %}"><span class="action-card-icon" aria-hidden="true">+</span><span class="action-card-copy"><strong>Add a new restaurant</strong><small>Introduce another excellent place to eat.</small></span><span class="action-card-arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="dashboard-action-card dashboard-action-manage" href="{% url 'open_show_restaurant' %}"><span class="action-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5M8 17h3"/></svg></span><span class="action-card-copy"><strong>Manage your collection</strong><small>Refine restaurant details and menus.</small></span><span class="action-card-arrow" aria-hidden="true">&rarr;</span></a>
+        </div>
+        <div class="catalog-import">
+            <div class="catalog-import-copy"><p class="eyebrow">Bring your catalog</p><h3>Import restaurants and dishes</h3><p>Upload a CSV you own or are authorized to use. Matching names are updated; listings missing from the file are left untouched.</p><a class="text-link" href="{% static 'FoodHub/catalog_import_template.csv' %}" download>Download the CSV template</a></div>
+            <form class="bulk-import-form" action="{% url 'upload_catalog' %}" method="post" enctype="multipart/form-data">{% csrf_token %}<label class="file-picker"><span>Choose catalog CSV</span><input type="file" name="catalog_file" accept=".csv,text/csv" required></label><button class="button" type="submit">Import catalog</button><p class="field-hint">CSV only. Maximum file size: 2 MB.</p></form>
+        </div>
+    </section>
+</section>
+{% endblock %}

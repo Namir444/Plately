@@ -1,0 +1,138 @@
+Foodly project changes
+======================
+
+- Fixed the FoodHub URL import to use the local views module.
+- Added the missing index view used by the root URL.
+- Removed the unused include import from FoodHub/urls.py.
+- Normalized URL list formatting and view indentation.
+- Removed generated __pycache__ directories.
+- Kept the Django project and app folder structure unchanged.
+- Restored the landing, sign-in, and sign-up templates to a clean styled layout.
+- Moved the shared CSS for those pages into FoodHub/Templates/style.css.
+
+Validation
+----------
+- python manage.py check: passed
+- python manage.py test: passed; no tests are currently defined
+
+Documentation and organization (2026-09-25)
+--------------------------------------------
+- Added a dedicated docs/ folder containing prd.md, architecture.md, rules.md,
+  design.md, and memory.md.
+- Documented the current product workflows, Django components, data model,
+  visual language, and contributor guidance based on the checked-in source.
+- Recorded configuration and asset-path mismatches that need attention before
+  treating the current checkout as deployment-ready.
+- Preserved the existing application and project package paths; the only new
+  directory is docs/.
+- No application code, database, or migration files were changed.
+
+Validation
+----------
+- Documentation and change-log updates were reviewed against the source tree.
+- Django checks and tests were not run for this documentation-only update.
+
+Application integration and checkout (2026-09-25)
+--------------------------------------------------
+- Registered the existing `delivery` Python package while retaining the
+  historical `FoodHub` Django app label used by the database and migrations.
+- Routed the project URL configuration to `delivery.urls`, explicitly
+  registered the existing capitalized template directory, and corrected shared
+  stylesheet references.
+- Changed cart, checkout, and catalog mutations to CSRF-protected POST actions;
+  refreshed the landing and sign-in error pages to use the shared Foodly style.
+- Added environment-backed Razorpay settings and a dependency manifest. Checkout
+  now reports when payment configuration is unavailable.
+- Added persisted orders and item/address snapshots, decimal menu prices, and a
+  CSRF-protected payment callback that verifies the Razorpay signature and
+  captured payment details before marking an order paid or removing purchased
+  items from the cart.
+- Added order history and confirmation pages. Reading order history no longer
+  clears the cart; the existing `success.html` now displays the verified order
+  confirmation.
+- Hash passwords for new accounts and upgrade legacy plain-text passwords on a
+  successful sign-in; expanded the password column through a new migration.
+- Added migration `0003` for menu, cart, and order tables, then applied it to the
+  workspace SQLite database without renaming the existing `FoodHub` tables.
+- Updated the project documentation to match the implemented flows and remaining
+  access-control limitations.
+
+Validation
+----------
+- `python manage.py check`: passed.
+- `python manage.py makemigrations --check --dry-run`: no model/migration drift.
+- `python manage.py migrate`: applied `FoodHub.0003` successfully.
+- Automated tests were not run.
+
+Plately interface and workflow polish (2026-09-25)
+---------------------------------------------------
+- Rebranded the product interface to Plately and added a shared responsive
+  base layout, navigation, flash messages, footer, and warm visual system.
+- Restyled all customer and catalog pages, including landing, account forms,
+  search and browsing, menus, cart, checkout, order history, and confirmations.
+- Added restaurant/cuisine search, customer and admin empty states, dashboard
+  catalog counts, directly editable menu entries, menu-item deletion, clearer
+  payment feedback, and confirmations for destructive catalog actions.
+- Added route-safe signup usernames, reserved the `admin` username, tightened
+  restaurant and menu validation, and kept all catalog mutations behind the
+  signed-in admin session.
+- Added a comprehensive delivery test suite covering page rendering, session
+  access, CSRF protection, account password hashing and legacy upgrades,
+  catalog actions, search, cart behavior, Razorpay signatures, and payment
+  confirmation/failure states.
+- Removed unused duplicate stylesheet and archived landing copy from the
+  template directory; consolidated page styling in
+  `delivery/static/FoodHub/styles.css`.
+- Installed Razorpay, python-dotenv, and compatible setuptools support in
+  `myenv`; documented install/configuration variables without adding key values
+  to tracked documentation. Local `.env` remains ignored.
+- Updated the PRD, architecture, engineering rules, design notes, and memory to
+  reflect the implemented Plately application.
+
+Validation
+----------
+- `python manage.py check`: passed with no Django system-check issues.
+- `python manage.py makemigrations --check --dry-run`: no schema changes needed.
+- `python manage.py test`: all 21 tests passed.
+- `python manage.py findstatic FoodHub/styles.css`: resolved to the shared app
+  stylesheet.
+- Razorpay SDK signature utility verified a valid local test signature; payment
+  API requests were mocked and no live transaction was made.
+
+Environment startup compatibility (2026-09-25)
+----------------------------------------------
+- Made the optional `python-dotenv` import in Django settings graceful when
+  `manage.py` is run with a Python interpreter outside `myenv`. Environment
+  variables supplied by the operating system still work; the local `.env` file
+  is loaded automatically when the application runs through `myenv`.
+
+Dashboard visual correction (2026-09-25)
+----------------------------------------
+- Rebuilt the catalog dashboard as a Plately Studio workspace with a composed
+  hero, clear primary action, restaurant/menu metrics, and focused catalog
+  action cards.
+- Added responsive dashboard styles for narrow screens and prevented dashboard
+  content from forcing an oversized layout.
+- Versioned the shared stylesheet URL to force browsers to fetch the revised
+  CSS instead of retaining a stale static-file cache.
+- Added template assertions for the dashboard visual structure and stylesheet
+  version in the automated test suite.
+
+Authorized catalog bulk import (2026-09-25)
+-------------------------------------------
+- Added a reusable CSV import command with full-file validation, dry-run mode,
+  case-insensitive restaurant/dish matching, and atomic create/update behavior.
+- Added a catalog CSV upload to the admin dashboard and a downloadable template
+  containing clearly fictional example records. Matching records are updated;
+  omitted catalog entries are preserved.
+- Validated required columns, model field lengths, rating and currency ranges,
+  two-decimal prices, image URLs, duplicate dishes, and consistent restaurant
+  details before any database writes.
+- Documented that catalog data must be owned or authorized. No Zomato or Swiggy
+  pages were scraped and no sample records were inserted into the live database.
+- Updated product, architecture, design, engineering-rule, and contributor
+  memory docs to describe the importer and its limits.
+
+Validation
+----------
+- Pending final Django checks and automated test run.

@@ -1,0 +1,4 @@
+Django>=6.1,<6.2
+razorpay>=1.4,<2.0
+python-dotenv>=1.0,<2.0
+setuptools<81
