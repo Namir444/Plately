@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: plately
+    runtime: python
+    plan: free
+    buildCommand: bash build.sh
+    startCommand: "gunicorn Foodly.wsgi:application --bind 0.0.0.0:$PORT"
+    healthCheckPath: /
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: plately-db
+          property: connectionString
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+
+databases:
+  - name: plately-db
+    plan: free
+    databaseName: plately
+    user: plately

@@ -55,6 +55,25 @@ python manage.py test
 To validate either catalog file without changing the database, add
 `--dry-run` to its `import_catalog` command.
 
+## Deploy on Render
+
+The included `render.yaml` defines a Render Blueprint with a Django web service
+and PostgreSQL database. Push the project to GitHub, then in Render choose
+**New > Blueprint**, connect the repository, and apply the Blueprint. Enter
+Razorpay **test** credentials when prompted; checkout is unavailable until
+these values are set. Render generates `DJANGO_SECRET_KEY` and supplies the
+database URL automatically.
+
+The build script installs dependencies, collects static files, applies
+migrations, and imports both demo catalogs. Catalog imports are repeatable, so
+each build restores the included demo data and updates matching catalog rows.
+
+Render's free web service can sleep after inactivity, so the first page load
+may be delayed. Render's free PostgreSQL database expires 30 days after
+creation; upgrade it before expiration to retain the public demo and its data.
+See Render's [free instance limitations](https://render.com/docs/free) before
+creating the Blueprint.
+
 ## Repository hygiene
 
 `.env`, SQLite data, and virtual environments are excluded by `.gitignore`.
